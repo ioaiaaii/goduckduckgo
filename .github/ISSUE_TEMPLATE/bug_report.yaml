@@ -1,0 +1,32 @@
+name: "Bug Report"
+description: Create a new issue for a bug.
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: "Context"
+      description: Please enter an explicit description of your issue
+      placeholder: Short and explicit description of your incident...
+    validations:
+      required: true
+  - type: textarea
+    id: expected_behaviour
+    attributes:
+      label: "Expected Behavior"
+      description: Please enter an explicit description of what you expected to happen
+      value: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: "MELT info"
+      description: Please provide relevant metrics, events, logs or traces if possible.
+      render: bash
+    validations:
+      required: false

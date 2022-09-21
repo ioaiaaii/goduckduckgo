@@ -1,12 +1,13 @@
 # Context
 
-Please include a summary of the changes and the related issue. Please also include relevant motivation and context. List any dependencies that are required for this change.
+Please include a summary of the changes with the related issue.
+List any dependencies that are required for this change.
 
-Fixes # (issue)
+Also, please make sure to use [conventional](https://www.conventionalcommits.org/en/v1.0.0/
+) and [atomic](https://www.aleksandrhovhannisyan.com/blog/atomic-git-commits/
+) commits.
 
 ## Changes
-
-Please delete options that are not relevant.
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
@@ -15,13 +16,12 @@ Please delete options that are not relevant.
 
 ## Verification
 
-Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration
+Please describe the tests that you ran to verify your changes, instruction to reproduce and test to another workstation.
 
 - [ ] Test A
 - [ ] Test B
 
-
-## Checklist:
+## Checklist
 
 - [ ] Code follows the style guidelines of this project
 - [ ] Code self-review

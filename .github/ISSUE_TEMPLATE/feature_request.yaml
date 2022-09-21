@@ -1,0 +1,19 @@
+name: "Feature Request"
+description: Create a new issue for a new feature request
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: "Context"
+      description: Provide a brief explanation of the feature
+      placeholder: Describe in a few lines your feature request
+    validations:
+      required: true
+  - type: textarea
+    id: suggested
+    attributes:
+      label: "Suggested solution"
+      description: Description of the solution, alternatives, or new features.
+      placeholder: A few specific words about your feature request.
+    validations:
+      required: true
