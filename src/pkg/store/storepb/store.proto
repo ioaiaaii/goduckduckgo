@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package storepb;
+
+option go_package = "./pkg/store/storepb";
+
+//import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+/// Store represents API
+service TodoService {
+  rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse) {}
+
+  // Bulk version of CreateTodo
+  rpc CreateTodos(CreateTodosRequest) returns (CreateTodosResponse) {}
+
+  rpc GetTodo(GetTodoRequest) returns (GetTodoResponse) {}
+
+  rpc ListTodo(ListTodoRequest) returns (ListTodoResponse) {}
+
+  rpc DeleteTodo(DeleteTodoRequest) returns (DeleteTodoResponse) {}
+
+  rpc UpdateTodo(UpdateTodoRequest) returns (UpdateTodoResponse) {}
+
+  rpc UpdateTodos(UpdateTodosRequest) returns (UpdateTodosResponse) {}
+}
+
+
+
+message InfoRequest {}
+
+message InfoResponse {
+  string db = 1;
+}
+
+
+
+message Todo {
+	string id = 1;
+	string title = 2;
+	string description = 3;
+
+	// @inject_tag: sql:",notnull,default:false"
+	bool completed = 4;
+
+	// @inject_tag: sql:"type:timestamptz,default:now()"
+	google.protobuf.Timestamp created_at = 5;
+
+	// @inject_tag: sql:"type:timestamptz"
+	google.protobuf.Timestamp updated_at = 6;
+}
+
+message CreateTodoRequest {
+	Todo item = 1;
+}
+
+message CreateTodoResponse {
+	string id = 1;
+}
+
+message CreateTodosRequest {
+	repeated Todo items = 1;
+}
+
+message CreateTodosResponse {
+	repeated string ids = 1;
+}
+
+message GetTodoRequest {
+	string id = 1;
+}
+
+message GetTodoResponse {
+	Todo item = 1;
+}
+
+message ListTodoRequest {
+	int32 limit = 1;
+	bool not_completed = 2;
+}
+
+message ListTodoResponse {
+	repeated Todo items = 1;
+}
+
+message DeleteTodoRequest {
+	string id = 1;
+}
+
+message DeleteTodoResponse {}
+
+message UpdateTodoRequest {
+	Todo item = 1;
+}
+
+message UpdateTodoResponse {}
+
+message UpdateTodosRequest {
+	repeated Todo items = 1;
+}
+
+message UpdateTodosResponse {}
