@@ -1,8 +1,8 @@
 # Context
 
-Please include a summary of the changes and the related issue. Please also include relevant motivation and context. List any dependencies that are required for this change.
-
-Fixes # (issue)
+Please include the context and the summary of the changes.
+List any dependencies that are required for this change.
+Kind reminder to use conventional and commits with atomic scope.
 
 ## Changes
 
@@ -15,13 +15,12 @@ Please delete options that are not relevant.
 
 ## Verification
 
-Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration
+Please describe environment configurations along with the tests to reproduce them.
 
 - [ ] Test A
 - [ ] Test B
 
-
-## Checklist:
+## Checklist
 
 - [ ] Code follows the style guidelines of this project
 - [ ] Code self-review
