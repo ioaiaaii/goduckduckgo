@@ -1,0 +1,24 @@
+name: CI
+on:
+  pull_request:
+    paths:
+      - go.mod
+      - '**.go'
+      - .github/workflows/ci.yml
+  push:
+    branches:
+      - master
+    paths:
+      - go.mod
+      - '**.go'
+      - .github/workflows/ci.yml
+jobs:
+  lint-test:
+    name: Linting and Testing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Linters
+        run: make lint
+      - name: Run Tests
+        run: make test
