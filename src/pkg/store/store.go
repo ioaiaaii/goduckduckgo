@@ -6,8 +6,8 @@ import (
 
 	db "github.com/go-pg/pg"
 	uuid "github.com/satori/go.uuid"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type DBStore struct {
@@ -27,7 +27,7 @@ func (s *DBStore) CreateTodo(ctx context.Context, req *storepb.CreateTodoRequest
 	req.Item.Id = uuid.NewV4().String()
 	err := s.client.Insert(req.Item)
 	if err != nil {
-		return nil, grpc.Errorf(codes.Internal, "Could not insert item into the database: %s", err)
+		return nil, status.Errorf(codes.Internal, "Could not insert item into the database: %s", err)
 	}
 
 	return &storepb.CreateTodoResponse{Id: req.Item.Id}, nil
