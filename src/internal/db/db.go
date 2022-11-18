@@ -47,8 +47,7 @@ func NewDB(cfg config.Config) *Database {
 	sqlDB.SetMaxOpenConns(100)
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
-	log.Println("DB init ok!")
-
+	log.Printf("DB INIT!!")
 	return &Database{
 		gormClient: gormDB,
 		sqlClient:  sqlDB,
