@@ -7,11 +7,12 @@ This project is a WIP playground to learn Golang with Software Engineering and S
 
 ## Roadmap
 
-- [ ] Codebase Init
-- [ ] Systems Design
+- [x] Codebase Init
+- [x] Package Build: Dockerfile
+- [x] Makefile to support local dev and CI/CD operations
 - [ ] Add gRPC to connect Store with Query components
+- [ ] Systems Design
 - [ ] Unit and Functional tests
-- [ ] Package Build: Dockerfile
 - [ ] Package Deploy: Helm Chart
 - [ ] Release Engineering
 - [ ] Telemetry: Logs
