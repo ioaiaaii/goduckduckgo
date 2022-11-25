@@ -37,6 +37,26 @@ This project is a WIP playground to learn Golang with Software Engineering and S
 └── src               # Project level src for codebase
 ```
 
+## Architecture
+
+### Components
+
+#### Query
+
+Query exposes an API for users interaction. It provides the interfaces in order to be asked for queries and returned the DDG's answers.
+Also, it handles the queries tasks such as:
+
+- Caching queries with TTL
+- Calling Store to store the query
+
+#### Store
+
+Store exposes a gRPC interface to interact with Query. It utilizes GORM to interact with a PostgreSQL. It handles the queries-answers persistency lifecycle.
+
+### Flow
+
+![flow](./docs/images/flows_v1.png)
+
 ## Release Engineering, Contributing and Git Flow
 
 ### Contributions
