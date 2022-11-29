@@ -1,11 +1,17 @@
 package query
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"goduckduckgo/pkg/api"
+	"goduckduckgo/pkg/config"
 	"goduckduckgo/pkg/duckduckgo"
+	"goduckduckgo/pkg/store/storepb"
 	"net/http"
+	"time"
+
+	"github.com/rs/zerolog/log"
 
 	route "goduckduckgo/pkg/server/http"
 )
@@ -15,13 +21,15 @@ type queryRequest struct {
 }
 
 type QueryAPI struct {
-	baseAPI *api.BaseAPI
+	baseAPI     *api.BaseAPI
+	storeClient storepb.StoreClient
 }
 
 // NewQueryAPI returns an initialized QueryAPI type.
-func NewQueryAPI() *QueryAPI {
+func NewQueryAPI(s storepb.StoreClient) *QueryAPI {
 	return &QueryAPI{
-		baseAPI: api.NewBaseAPI(),
+		baseAPI:     api.NewBaseAPI(),
+		storeClient: s,
 	}
 }
 
@@ -41,12 +49,11 @@ func (qapi *QueryAPI) query(w http.ResponseWriter, r *http.Request) {
 
 	// Handle payload status and values
 	if err != nil {
-		// RespondWithError(w, http.StatusBadRequest, err.Error())
-		fmt.Println(err)
+		api.RespondWithError(w, http.StatusBadRequest, err.Error())
 	}
 
 	if d.More() {
-		fmt.Println("Extraneous data in payload")
+		api.RespondWithError(w, http.StatusBadRequest, "Extraneous data in payload")
 	}
 
 	switch r.Method {
@@ -55,57 +62,41 @@ func (qapi *QueryAPI) query(w http.ResponseWriter, r *http.Request) {
 		return
 	case "POST":
 
-		q, err := duckduckgo.NewDDGQuery("https://api.duckduckgo.com", request.Query)
+		q, err := duckduckgo.NewDDGQuery(config.DefaultDDGEndpoint, request.Query)
 		if err != nil {
 			fmt.Println(err)
 			api.RespondWithError(w, http.StatusBadRequest, err.Error())
 
 		}
+
 		err = q.Do()
 		if err != nil {
 			fmt.Println(err)
 			api.RespondWithError(w, http.StatusBadRequest, err.Error())
 
 		}
+
+		{
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+			defer cancel()
+
+			rr := storepb.CreateRequest{
+				Query:  request.Query,
+				Answer: q.Payload(),
+			}
+
+			fmt.Println(rr.Query)
+
+			grpcReq, err := qapi.storeClient.Create(ctx, &rr)
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			log.Info().Msgf("URL: %v", grpcReq.Status)
+		}
+
 		api.RespondWithJSON(w, http.StatusAccepted, q.Payload())
 
 	}
-
-	// fmt.Println(q.Payload().Answer)
-	// return &queryData{
-	// 	ResultType: res.Value.Type(),
-	// 	Result:     res.Value,
-	// 	Stats:      qs,
-	// }, res.Warnings, nil, qry.Close
-
-	// switch r.Method {
-	// case "GET":
-	// 	// q, err := duckduckgo.NewDDGQuery("https://api.duckduckgo.com", request.Query)
-	// 	// if err != nil {
-	// 	// 	fmt.Println(err)
-	// 	// 	return
-	// 	// }
-	// 	// q.Do()
-	// 	// RespondWithJSON(w, http.StatusAccepted, q.Payload())
-	// 	fmt.Println("lelos")
-	// 	return nil, nil, nil, nil
-	// case "POST":
-	// 	q, err := duckduckgo.NewDDGQuery("https://api.duckduckgo.com", request.Query)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		return nil, nil, nil, nil
-	// 	}
-	// 	q.Do()
-	// 	// fmt.Println(q.Payload().Answer)
-	// 	// return &queryData{
-	// 	// 	ResultType: res.Value.Type(),
-	// 	// 	Result:     res.Value,
-	// 	// 	Stats:      qs,
-	// 	// }, res.Warnings, nil, qry.Close
-
-	// 	return q.Payload().Answer, nil, nil, nil
-
-	// }
-	//return q.Payload().Answer, nil, nil, nil
 
 }
