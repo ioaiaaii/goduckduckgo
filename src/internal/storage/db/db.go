@@ -3,7 +3,6 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"goduckduckgo/internal/models"
 	"goduckduckgo/pkg/config"
 	"log"
 	"time"
@@ -13,7 +12,7 @@ import (
 )
 
 type Database struct {
-	gormClient *gorm.DB
+	GormClient *gorm.DB
 	sqlClient  *sql.DB
 }
 
@@ -49,7 +48,7 @@ func NewDB(cfg config.Config) *Database {
 
 	log.Printf("DB INIT!!")
 	return &Database{
-		gormClient: gormDB,
+		GormClient: gormDB,
 		sqlClient:  sqlDB,
 	}
 }
@@ -74,7 +73,7 @@ func (d *Database) CloseDBConnection() error {
 
 func (d *Database) AutoMigrateDB() error {
 
-	if err := d.gormClient.AutoMigrate(&models.User{}); err != nil {
+	if err := d.GormClient.AutoMigrate(&DDGQueryTable{}); err != nil {
 		return err
 	}
 

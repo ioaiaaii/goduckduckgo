@@ -1,0 +1,6 @@
+syntax = "proto3";
+import "pkg/duckduckgo/typespb/types.proto";
+
+package goduckduckgo;
+option go_package = "goduckduckgo/internal/storage/db/modelspb";
+
