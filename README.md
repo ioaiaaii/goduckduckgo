@@ -10,7 +10,7 @@ This project is a WIP playground to learn Golang with Software Engineering and S
 - [x] Codebase Init
 - [x] Package Build: Dockerfile
 - [x] Makefile to support local dev and CI/CD operations
-- [ ] Add gRPC to connect Store with Query components
+- [x] Add gRPC to connect Store with Query components
 - [ ] Systems Design
 - [ ] Unit and Functional tests
 - [ ] Package Deploy: Helm Chart
@@ -51,11 +51,11 @@ Also, it handles the queries tasks such as:
 
 #### Store
 
-Store exposes a gRPC interface to interact with Query. It utilizes GORM to interact with a PostgreSQL. It handles the queries-answers persistency lifecycle.
+Store exposes a gRPC interface to interact with Query. It utilizes GORM to interact with a PostgreSQL. It handles the queries-answers persistency lifecycle with `CRUD` operations.
 
 ### Flow
 
-![flow](./docs/images/flows_v1.png)
+![flow](./docs/d2/arch.svg)
 
 ## Release Engineering, Contributing and Git Flow
 

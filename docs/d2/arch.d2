@@ -1,0 +1,16 @@
+
+DDG: {
+  shape: image
+  icon: https://duckduckgo.com/assets/addons/logo.svg
+}
+
+PG: PostgreSQL
+PG.shape: cylinder
+
+User: user
+User.shape: person
+
+User <-> Query: REST
+Query <-> DDG: HTTP Request
+Query <-> Store: gRPC
+Store <-> PG: GORM
