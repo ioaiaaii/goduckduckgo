@@ -3,6 +3,7 @@ package main
 import (
 	v1 "goduckduckgo/pkg/api/query"
 	"goduckduckgo/pkg/config"
+	"goduckduckgo/pkg/store"
 
 	"goduckduckgo/pkg/server/http"
 
@@ -21,7 +22,7 @@ var queryCmd = &cobra.Command{
 	Use:     "query [flags]",
 	Short:   sortHelpQuery,
 	Example: exampleQuery,
-	RunE:    runquery,
+	RunE:    runQuery,
 }
 
 // init, is a standard method for cobra framework to init and register commands flags and params.
@@ -49,24 +50,43 @@ func init() {
 		log.Warn().Err(err).Msgf("Flagging shutdown-timeout failed with error: %v", err.Error())
 	}
 
+	queryCmd.Flags().String("store-endpoint", config.DefaultQueryEndpoint, "gRPC Endpoint for Query")
+	err = viper.BindPFlag("store-endpoint", queryCmd.Flags().Lookup("store-endpoint"))
+	if err != nil {
+		log.Warn().Err(err).Msgf("Flagging store-endpoint failed with error: %v", err.Error())
+	}
 }
 
-// runquery, contains the logic to run the query API.
+// runQuery, contains the logic to run the query API.
 // It creates a new router, and it registers to the new server.
 // It creates a cancel channel, runs the server to run.Group and manages its lifecycle.
-func runquery(cmd *cobra.Command, args []string) error {
+func runQuery(cmd *cobra.Command, args []string) error {
 
-	var g run.Group
+	var (
+		err error
+		g   run.Group
+		cfg config.Config
+	)
 
-	// 	newDB := db.NewDB(cfg)
+	//Init config
+	cfg.QueryConfig.HTTPPort = viper.GetString("server-port")
+	cfg.QueryConfig.HTTPServerShutdownTimeout = viper.GetDuration("shutdown-timeout")
+	cfg.QueryConfig.HTTPServerTimeout = viper.GetDuration("server-timeout")
+	cfg.QueryConfig.StoreEndpoint = viper.GetString("store-endpoint")
 
-	// 	newDB.AutoMigrateDB()
+	// gRPC Client
+	sc := store.RegisterStoreClient(cfg.QueryConfig.StoreEndpoint)
+	client, err := sc.NewStoreClient()
+	if err != nil {
+		log.Fatal().Err(err)
+	}
 
+	//HTTP Server
 	router := http.NewRouter()
-	apiV1 := v1.NewQueryAPI()
+	apiV1 := v1.NewQueryAPI(client)
 	apiV1.Register(router.WithPrefix("/api/v1"))
 
-	//create new server and register handler with new router
+	//Create new server and register handler with new router
 	srv := http.NewServer(http.HTTPPort(viper.GetString("server-port")), http.HTTPServerTimeout(viper.GetDuration("server-timeout")), http.HTTPServerShutdownTimeout(viper.GetDuration("shutdown-timeout")))
 	srv.HandleAPIPath("/", router)
 	srv.HandleAPIPath("/metrics", promhttp.Handler())
