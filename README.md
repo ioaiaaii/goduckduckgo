@@ -57,6 +57,7 @@ Store exposes a gRPC interface to interact with Query. It utilizes GORM to inter
 
 ![flow](./docs/d2/arch.svg)
 
+
 ## Release Engineering, Contributing and Git Flow
 
 ### Contributions
