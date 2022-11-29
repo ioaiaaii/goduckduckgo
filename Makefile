@@ -249,3 +249,19 @@ build-darwin:
 build-all: build-linux build-darwin
 	sha256sum ${BUILD_PATH}/${MODULE} > ${BUILD_PATH}/${MODULE}.sha256
 	sha256sum ${BUILD_PATH}/${MODULE}-darwin> ${BUILD_PATH}/${MODULE}-darwin.sha256
+
+protoc:
+	protoc --proto_path=${SRC} --go_out=${SRC} --go_opt=paths=source_relative --go-grpc_out=${SRC} --go-grpc_opt=paths=source_relative ${SRC}/pkg/duckduckgo/typespb/*.proto  ${SRC}/pkg/store/storepb/store.proto
+
+
+#	cd ${SRC} && protoc pkg/store/storepb/store.proto --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative --proto_path=.
+
+# { 	\
+# 	cd ${SRC} && protoc \		docker run --env-file $(DEPLOY_PATH)/docker/.env --rm -p 127.0.0.1:$${port}:$${port} $(MODULE):$(VERSION) ;\
+# }
+# cd ${SRC} && protoc \
+# 	pkg/duckduckgo/*.proto --go_out=. --go_opt=paths=source_relative --proto_path=${PWD}/pkg
+# cd ${SRC} && protoc pkg/store/storepb/store.proto --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative --proto_path=.
+
+
+#	protoc --proto_path=${SRC} --go_out=${SRC} --go_opt=paths=source_relative --go-grpc_out=${SRC} --go-grpc_opt=paths=source_relative ${SRC}/pkg/duckduckgo/typespb/*.proto  ${SRC}/pkg/store/storepb/store.proto

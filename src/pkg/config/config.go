@@ -6,6 +6,7 @@ import (
 
 // Init default values
 const (
+	DefaultDDGEndpoint                    = "https://api.duckduckgo.com"
 	DefaultQueryHTTPPort                  = "8080"
 	DefaultQueryEnv                       = "production"
 	DefaultQueryHTTPServerTimeout         = 30
@@ -15,20 +16,26 @@ const (
 	DefaultStoreDBUser                    = ""
 	DefaultStoreDBPassword                = ""
 	DefaultStoreDBName                    = ""
+	DefaultStoreGRPCAddress               = "127.0.0.1"
+	DefaultStoreGRPCPort                  = "50052"
+	DefaultQueryEndpoint                  = DefaultStoreGRPCAddress + ":" + DefaultStoreGRPCPort
 )
 
 type queryConfig struct {
 	HTTPPort                  string
 	HTTPServerTimeout         time.Duration
 	HTTPServerShutdownTimeout time.Duration
+	StoreEndpoint             string
 }
 
 type storeConfig struct {
-	DBPort     string
-	DBHost     string
-	DBUser     string
-	DBPassword string
-	DBName     string
+	DBPort           string
+	DBHost           string
+	DBUser           string
+	DBPassword       string
+	DBName           string
+	StoreGRPCAddress string
+	StoreGRPCPort    string
 }
 
 type Config struct {
