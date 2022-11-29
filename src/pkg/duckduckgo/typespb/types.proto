@@ -1,0 +1,56 @@
+syntax = "proto3";
+package goduckduckgo;
+option go_package = "goduckduckgo/pkg/duckduckgo/typespb";
+
+//import "google/protobuf/timestamp.proto";
+
+message Icon {
+	int32 Height = 1 ;
+	string URL = 2;
+	int32 Width = 3  ;
+}
+
+message Results {
+	string FirstURL = 1 ;
+	Icon Icon = 2 ;
+	string Result = 3 ;
+	string Text = 4;
+}
+
+message RelatedTopicsIcon {
+	string Height = 1;
+	string URL = 2 ;
+	string Width = 3 ;
+}
+
+message RelatedTopicsResults {
+	string FirstURL = 1 ;
+	RelatedTopicsIcon Icon = 2 ;
+	string Result = 3 ;
+	string Text = 4 ;
+}
+
+message DuckDuckGoResponse {
+	string Abstract = 1 ;
+	string AbstractSource = 2  ;
+	string AbstractText = 3  ;
+	string AbstractURL = 4 ;
+	string answer = 5 ;
+	string AnswerType = 6 ;
+	string Definition = 7 ;
+	string DefinitionSource = 8 ;
+	string DefinitionURL = 9 ;
+	string Heading = 10 ;
+	string Image = 11 ;
+	int32 ImageHeight = 12 ;
+	int32 ImageIsLogo = 13 ;
+	int32  ImageWidth =14 ;
+	string Redirect = 15 ;
+	repeated RelatedTopicsResults RelatedTopics = 16;
+	repeated Results Results = 17;
+	string  Type = 18  ;
+}
+
+message QueryPayload {
+	DuckDuckGoResponse Answer = 1;
+}

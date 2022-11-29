@@ -5,17 +5,47 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"goduckduckgo/pkg/duckduckgo/typespb"
 	"io"
 	"net/http"
 	"net/url"
 	"time"
-
-	"github.com/hokaccha/go-prettyjson"
 )
 
-type DuckDuckGoReq struct {
-	URL     *url.URL
-	Results DuckDuckGoResponse
+type DuckDuckGoQuery struct {
+	query    string
+	format   string
+	queryURL string
+	answer   *typespb.DuckDuckGoResponse
+}
+
+func NewDDGQuery(URL, query string) (*DuckDuckGoQuery, error) {
+	var q DuckDuckGoQuery
+	u, err := url.Parse(URL + "/")
+	if err != nil {
+		return nil, err
+	}
+	qQ := u.Query()
+	qQ.Set("q", query)
+	qQ.Set("format", "json")
+	qQ.Set("t", "goduckduckgo")
+
+	u.RawQuery = qQ.Encode()
+
+	q.query = query
+	q.format = "json"
+	q.queryURL = u.String()
+	return &q, nil
+
+}
+
+func (q *DuckDuckGoQuery) Payload() *typespb.QueryPayload {
+
+	r := &typespb.QueryPayload{
+		Answer: q.answer,
+	}
+
+	return r
 }
 
 // func debug(data []byte, err error) {
@@ -28,10 +58,7 @@ type DuckDuckGoReq struct {
 
 func (q *DuckDuckGoQuery) Do() error {
 
-	var response DuckDuckGoResponse
-
-	//prms := DuckDuckGoQuery{}
-	// prms.initDDGQueryParams(URL, query)
+	var response typespb.DuckDuckGoResponse
 
 	//https://www.loginradius.com/blog/engineering/tune-the-go-http-client-for-high-performance/
 	t := http.DefaultTransport.(*http.Transport).Clone()
@@ -89,11 +116,4 @@ func (q *DuckDuckGoQuery) Do() error {
 
 	q.answer = &response
 	return nil
-}
-
-func (response *DuckDuckGoResponse) MakePrettyJson() string {
-	s, _ := prettyjson.Marshal(response)
-
-	return string(s)
-
 }
