@@ -2,7 +2,7 @@
 
 ## Overview
 
-`goduckduckgo` is a set of microservices, answering client's queries by talking to [GDD's API](api.duckduckgo.com).
+`goduckduckgo` is a set of microservices, that answer client's queries by talking to [GDD's API](api.duckduckgo.com).
 This project is a WIP playground to learn Golang with Software Engineering and Systems Design under the SRE discipline.
 
 ## Roadmap
@@ -29,10 +29,13 @@ This project is a WIP playground to learn Golang with Software Engineering and S
 ├── api               # API definition
 ├── build             # Builds dir
 │   ├── ci            # CI configurations
-│   └── package       # Images
-├── deploy            # Deployment manifests
-│   ├── helm-charts   # Helm Charts
-│   ├── monitoring    # Rules,Dashboards SLOs
+│   └── package       # Build Package
+├── deploy            # Deployment Package
+│   └── goduckduckgo  # Helm Charts
+├── monitor           # Rules,Dashboards SLOs
+│   ├── dashboards    # Visualization
+│   ├── rules         # Alerting
+│   └── slo           # Analytics
 ├── docs              # Dir for documentation related files
 └── src               # Project level src for codebase
 ```
@@ -43,7 +46,7 @@ This project is a WIP playground to learn Golang with Software Engineering and S
 
 #### Query
 
-Query exposes an API for users interaction. It provides the interfaces in order to be asked for queries and returned the DDG's answers.
+Query exposes an API for user interaction. It provides the interfaces to be asked for queries and returneds the DDG's answers.
 Also, it handles the queries tasks such as:
 
 - Caching queries with TTL
@@ -56,7 +59,6 @@ Store exposes a gRPC interface to interact with Query. It utilizes GORM to inter
 ### Flow
 
 ![flow](./docs/d2/arch.svg)
-
 
 ## Release Engineering, Contributing and Git Flow
 
