@@ -159,7 +159,7 @@ local-infra:
 ## Call it with optional cli arguments
 ## e.g. make local-run CMD_ARGS=query
 .PHONY: local-run
-local-run: local-infra
+local-run: local-infra mod-sync
 	@cd ${SRC} && ${GOBIN} run -mod=vendor ${GOBUILD_OPTS} ${CMD_PATH} $(CMD_ARGS)
 
 ## Detects the default exposed port from container's image, and run the container with the exposed port
