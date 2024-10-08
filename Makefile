@@ -143,7 +143,8 @@ environment:
 	@echo "Go bin: "${GOBIN}
 	@echo "Go Version: "${GO_VERSION}
 
-
+mod-update:
+	@cd ${SRC} && ${GOBIN} get -u ./... && go vet ./...
 ## Runs go mod {tidy,vendor,verify}
 mod-sync: 	
 	@cd ${SRC} && ${GOBIN} mod tidy && go mod vendor && go mod verify && echo "at: `pwd`"
